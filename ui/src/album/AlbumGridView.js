@@ -18,6 +18,7 @@ import {
   ArtistLinkField,
   RangeField,
 } from '../common'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -88,12 +89,15 @@ const useCoverStyles = makeStyles({
   },
 })
 
-const getColsForWidth = (width) => {
-  if (width === 'xs') return 2
-  if (width === 'sm') return 3
-  if (width === 'md') return 4
-  if (width === 'lg') return 6
-  return 9
+const getColsForWidth = ({ count, width }) => {
+  if (width.match(/^(lg|md)$/)) {
+    if (count <= 40) return 6
+    if (40 < count && count < 80) return 5
+    if (count >= 80) return 4
+  } else {
+    if (width === 'sm') return 3
+    if (width === 'xs') return 2
+  }
 }
 
 const Cover = withContentRect('bounds')(
@@ -163,6 +167,7 @@ const AlbumGridTile = ({ showArtist, record, basePath }) => {
 }
 
 const LoadedAlbumGrid = ({ ids, data, basePath, width }) => {
+  const count = useSelector((state) => state.slider.value)
   const classes = useStyles()
   const { filterValues } = useListContext()
   const isArtistView = !!(filterValues && filterValues.artist_id)
@@ -172,7 +177,7 @@ const LoadedAlbumGrid = ({ ids, data, basePath, width }) => {
       <GridList
         component={'div'}
         cellHeight={'auto'}
-        cols={getColsForWidth(width)}
+        cols={getColsForWidth({ count, width })}
         spacing={20}
       >
         {ids.map((id) => (

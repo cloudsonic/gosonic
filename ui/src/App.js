@@ -30,6 +30,7 @@ import config from './config'
 import { setDispatch, startEventStream } from './eventStream'
 import { keyMap } from './hotkeys'
 import useChangeThemeColor from './useChangeThemeColor'
+import sliderReducer from './reducers/sliderSlice'
 
 const history = createHashHistory()
 
@@ -54,6 +55,7 @@ const App = () => (
         addToPlaylistDialog: addToPlaylistDialogReducer,
         activity: activityReducer,
         settings: settingsReducer,
+        slider: sliderReducer,
       },
     })}
   >
